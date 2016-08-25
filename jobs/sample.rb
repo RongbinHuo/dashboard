@@ -46,6 +46,6 @@ SCHEDULER.every '2s' do
 
   send_event('valuation', { current: current_valuation, last: last_valuation })
   send_event('karma', { current: current_karma, last: last_karma })
-  send_event('synergy',   { value: (amazon_scoring_result_3p*100).round(2) })
+  send_event('synergy',   { value: (amazon_scoring_3p*100).round(2) })
 end
 
