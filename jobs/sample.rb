@@ -1,5 +1,4 @@
 require 'elasticsearch'
-require 'date'
 
 
 client = Elasticsearch::Client.new log: true
@@ -42,7 +41,7 @@ SCHEDULER.every '2s' do
   
   last_valuation = amazon_scoring_24p*1000
   last_karma     = amazon_scoring_24p
-  current_valuation = amazon_scoring_result_3p*1000
+  current_valuation = amazon_scoring_3p*1000
   current_karma     = amazon_scoring_24p
 
   send_event('valuation', { current: current_valuation, last: last_valuation })
