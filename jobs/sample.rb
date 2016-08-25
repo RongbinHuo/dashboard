@@ -25,7 +25,7 @@ SCHEDULER.every '2s' do
                                   }
                                },
                               aggs: { avg_grade: { avg: { field: 'scoring'}}}}
-  amazon_scoring_24p = amazon_scoring_result["aggregations"]["avg_grade"]["value"]
+  amazon_scoring_24p = amazon_scoring_result_24p["aggregations"]["avg_grade"]["value"]
 
   #Scoring result for the past 3 hours
 
@@ -38,7 +38,7 @@ SCHEDULER.every '2s' do
                                   }
                                },
                               aggs: { avg_grade: { avg: { field: 'scoring'}}}}
-  amazon_scoring_3p = amazon_scoring_result["aggregations"]["avg_grade"]["value"]
+  amazon_scoring_3p = amazon_scoring_result_3p["aggregations"]["avg_grade"]["value"]
   
   last_valuation = amazon_scoring_24p*1000
   last_karma     = amazon_scoring_24p
