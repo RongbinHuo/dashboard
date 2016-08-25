@@ -8,3 +8,5 @@ gem 'twitter', '>= 5.9.0'
 gem 'execjs'
 
 gem 'therubyracer'
+
+gem 'elasticsearch'
