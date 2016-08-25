@@ -1,5 +1,5 @@
 require 'elasticsearch'
-
+require 'market_beat'
 
 client = Elasticsearch::Client.new log: true
 current_valuation = 0

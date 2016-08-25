@@ -10,3 +10,5 @@ gem 'execjs'
 gem 'therubyracer'
 
 gem 'elasticsearch'
+
+gem 'market_beat'
