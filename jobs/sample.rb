@@ -39,13 +39,13 @@ SCHEDULER.every '2s' do
                               aggs: { avg_grade: { avg: { field: 'scoring'}}}}
   amazon_scoring_3p = amazon_scoring_result_3p["aggregations"]["avg_grade"]["value"]
   
-  last_valuation = amazon_scoring_24p*1000
+  last_valuation = (amazon_scoring_24p*1000).round(2)
   last_karma     = amazon_scoring_24p
-  current_valuation = amazon_scoring_3p*1000
+  current_valuation = (amazon_scoring_3p*1000).round(2)
   current_karma     = amazon_scoring_24p
 
   send_event('valuation', { current: current_valuation, last: last_valuation })
   send_event('karma', { current: current_karma, last: last_karma })
-  send_event('synergy',   { value: (amazon_scoring_3p*100).round(2) })
+  send_event('synergy',   { value: (amazon_scoring_3p*1000).round(2) })
 end
 
