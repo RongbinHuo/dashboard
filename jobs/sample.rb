@@ -1,7 +1,7 @@
 require 'elasticsearch'
 require 'market_beat'
 
-client = Elasticsearch::Client.new log: true
+client = Elasticsearch::Client.new log: false
 current_valuation = 0
 current_karma = 0
 

@@ -1,7 +1,7 @@
 require 'elasticsearch'
 # Populate the graph with some random points
 
-client = Elasticsearch::Client.new log: true
+client = Elasticsearch::Client.new log: false
 points = []
 (1..10).each do |i|
   points << { x: i, y: rand(50) }
