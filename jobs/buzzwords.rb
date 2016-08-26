@@ -1,6 +1,6 @@
 require 'market_beat'
 
-buzzwords = ['RT Pirce', 'Day Range', 'Change Percent', 'One day', '52 Week High', '200 Day Change', '50 Day Change', 'Percent from 52 high'] 
+buzzwords = ['RT Pirce', 'Day Range', 'Change Percent', 'One day', '52 Week High', '200 Day Change', '50 Day Change', 'Year high change'] 
 buzzword_counts = Hash.new({ value: 0 })
 
 SCHEDULER.every '2s' do
@@ -19,7 +19,7 @@ SCHEDULER.every '2s' do
   buzzword_counts['52 Week High'] = { label: '52 Week High', value: year_high }
   buzzword_counts['200 Day Change'] = { label: '200 Day Change', value: two_hundrad_days_change }
   buzzword_counts['50 Day Change'] = { label: '50 Day Change', value: fifty_days_change }
-  buzzword_counts['Percent from 52 high'] = { label: 'Percent from 52 high', value: percent_from_year_high }
+  buzzword_counts['Year high change'] = { label: 'Year high change', value: percent_from_year_high }
 
   send_event('buzzwords', { items: buzzword_counts.values })
 end
