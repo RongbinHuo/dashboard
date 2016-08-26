@@ -15,7 +15,7 @@ SCHEDULER.every '2s' do
   buzzword_counts['Bid Pirce'] = { label: 'Bid Pirce', value: stock_price }
   buzzword_counts['Day Range'] = { label: 'Day Range', value: stock_day_range }
   buzzword_counts['Change Percent'] = { label: 'Change Percent', value: stock_change_percent }
-  buzzword_counts['One day'] = { label: 'One day', value: stock_one_day_change[0] + "  " + stock_one_day_change[1] }
+  buzzword_counts['One day'] = { label: 'One day', value: stock_one_day_change[1] }
   buzzword_counts['52 Week High'] = { label: '52 Week High', value: year_high }
   buzzword_counts['200 Day Change'] = { label: '200 Day Change', value: two_hundrad_days_change }
   buzzword_counts['50 Day Change'] = { label: '50 Day Change', value: fifty_days_change }
