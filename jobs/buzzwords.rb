@@ -4,9 +4,9 @@ buzzwords = ['RT Pirce', 'Day Range', 'Change Percent', 'One day', '52 Week High
 buzzword_counts = Hash.new({ value: 0 })
 
 SCHEDULER.every '2s' do
-  stock_price = MarketBeat.bid_real_time :AMZN
+  stock_price = MarketBeat.last_trade_real_time :AMZN
   stock_day_range = MarketBeat.days_range_real_time :AMZN
-  stock_change_percent = MarketBeat.change_percent_real_time :AMZN
+  stock_change_percent = MarketBeat.percent_change_real_time :AMZN
   stock_one_day_change = MarketBeat.change_and_percent_change :AMZN
   year_high = MarketBeat.high_52_week :AMZN
   two_hundrad_days_change = MarketBeat.percent_change_from_200_day_moving_average :AMZN
