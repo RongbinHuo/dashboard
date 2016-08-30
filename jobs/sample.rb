@@ -54,13 +54,14 @@ SCHEDULER.every '2s' do
                                },
                               aggs: { avg_grade: { avg: { field: 'scoring'}}}}
   amazon_scoring_3_all_p = amazon_scoring_result_3_all_p["aggregations"]["avg_grade"]["value"]
-
-  scoring_increase_overall = (amazon_scoring_3_to_2_p-amazon_scoring__all_avg)/amazon_scoring__all_avg
-  scoring_increase_than_pre = (amazon_scoring_3_to_2_p-amazon_scoring_3_all_p)/amazon_scoring_3_all_p
+  if !scoring_increase_overall.nil? && !amazon_scoring__all_avg.nil? && !amazon_scoring_3_all_p.nil?
+    scoring_increase_overall = (amazon_scoring_3_to_2_p-amazon_scoring__all_avg)/amazon_scoring__all_avg
+    scoring_increase_than_pre = (amazon_scoring_3_to_2_p-amazon_scoring_3_all_p)/amazon_scoring_3_all_p
   
-  predict_s = %x(python /home/ec2-user/twitt/predict.py -0.66410813 -0.66404772 /home/ec2-user/twitt/model/model.pkl)
-  predict = predict_s.to_f
-
+    predict_s = %x(python /home/ec2-user/twitt/predict.py -0.66410813 -0.66404772 /home/ec2-user/twitt/model/model.pkl)
+    predict = predict_s.to_f
+  else
+    predict = 0
 
   last_valuation = (amazon_scoring__all_avg*1000).round(2)
   last_karma     = amazon_scoring__all_avg
