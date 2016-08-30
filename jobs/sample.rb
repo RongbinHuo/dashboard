@@ -62,6 +62,7 @@ SCHEDULER.every '2s' do
     predict = predict_s.to_f
   else
     predict = 0
+  end
 
   last_valuation = (amazon_scoring__all_avg*1000).round(2)
   last_karma     = amazon_scoring__all_avg
