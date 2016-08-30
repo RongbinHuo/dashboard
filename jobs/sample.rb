@@ -60,7 +60,15 @@ SCHEDULER.every '2s' do
   
     # predict_s = %x(python /home/ec2-user/twitt/predict.py -0.66410813 -0.66404772 /home/ec2-user/twitt/model/model.pkl)
     predict_s = `python /home/ec2-user/twitt/predict.py #{scoring_increase_overall} #{scoring_increase_than_pre} /home/ec2-user/twitt/model/model.pkl`
-    predict = predict_s.to_f
+    score_percent = predict_s.to_f
+    predict = 0
+    if score_percent > 0.3
+      predict = score_percent/0.5
+    elsif score_percent < 0.2
+      predict = -(0.2-score_percent)/0.3
+    else
+      predict = (score_percent-0.25)/0.1
+    end
   else
     predict_s = `python /home/ec2-user/twitt/predict.py 0 0 /home/ec2-user/twitt/model/model.pkl`
     predict = predict_s.to_f
@@ -73,6 +81,6 @@ SCHEDULER.every '2s' do
 
   send_event('valuation', { current: current_valuation, last: last_valuation })
   send_event('karma', { current: current_karma, last: last_karma })
-  send_event('synergy',   { value: (predict*10).round(2) })
+  send_event('synergy',   { value: (predict*100).round(2) })
 end
 
