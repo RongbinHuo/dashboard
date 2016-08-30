@@ -66,7 +66,7 @@ SCHEDULER.every '2s' do
 
   last_valuation = (amazon_scoring__all_avg*1000).round(2)
   last_karma     = amazon_scoring__all_avg
-  current_valuation = (amazon_scoring_3p*1000).round(2)
+  current_valuation = amazon_scoring_3p.nil? ? 0 : (amazon_scoring_3p*1000).round(2)
   current_karma     = amazon_scoring__all_avg
 
   send_event('valuation', { current: current_valuation, last: last_valuation })
