@@ -37,7 +37,7 @@ SCHEDULER.every '2s' do
   amazon_scoring_result_3_to_2_p = client.search index: 'stocks', type: 'Amazon', body: { size: 0, query: {
                                   range: {
                                     created_at: {
-                                      gte: time_range_start,
+                                      # gte: time_range_start,
                                       lte: time_range_end
                                     }
                                   }
