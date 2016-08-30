@@ -54,7 +54,7 @@ SCHEDULER.every '2s' do
                                },
                               aggs: { avg_grade: { avg: { field: 'scoring'}}}}
   amazon_scoring_3_all_p = amazon_scoring_result_3_all_p["aggregations"]["avg_grade"]["value"]
-  if !scoring_increase_overall.nil? && !amazon_scoring__all_avg.nil? && !amazon_scoring_3_all_p.nil?
+  if !amazon_scoring_3_to_2_p.nil? && !amazon_scoring__all_avg.nil? && !amazon_scoring_3_all_p.nil?
     scoring_increase_overall = (amazon_scoring_3_to_2_p-amazon_scoring__all_avg)/amazon_scoring__all_avg
     scoring_increase_than_pre = (amazon_scoring_3_to_2_p-amazon_scoring_3_all_p)/amazon_scoring_3_all_p
   
