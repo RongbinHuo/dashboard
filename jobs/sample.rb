@@ -37,7 +37,7 @@ SCHEDULER.every '2s' do
   amazon_scoring_result_3_to_2_p = client.search index: 'stocks', type: 'Amazon', body: { size: 0, query: {
                                   range: {
                                     created_at: {
-                                      # gte: time_range_start,
+                                      gte: time_range_start,
                                       lte: time_range_end
                                     }
                                   }
@@ -61,7 +61,8 @@ SCHEDULER.every '2s' do
     predict_s = %x(python /home/ec2-user/twitt/predict.py -0.66410813 -0.66404772 /home/ec2-user/twitt/model/model.pkl)
     predict = predict_s.to_f
   else
-    predict = 0
+    predict_s = %x(python /home/ec2-user/twitt/predict.py -0.66410813 -0.66404772 /home/ec2-user/twitt/model/model.pkl)
+    predict = predict_s.to_f
   end
 
   last_valuation = (amazon_scoring__all_avg*1000).round(2)
