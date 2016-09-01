@@ -54,12 +54,20 @@ SCHEDULER.every '2s' do
                                },
                               aggs: { avg_grade: { avg: { field: 'scoring'}}}}
   amazon_scoring_3_all_p = amazon_scoring_result_3_all_p["aggregations"]["avg_grade"]["value"]
+  stock_price = MarketBeat.last_trade_real_time :AMZN
+  year_high = MarketBeat.high_52_week :AMZN
+  year_low = MarketBeat.low_52_week :AMZN
+  day_range = MarketBeat.days_range :AMZN
+  day_high = day_range[1]
+  day_low = day_range[0]
+  quote_data_year_percent = (stock_price - year_low)/(year_high - stock_price)
+  quote_data_day_percent = (stock_price - day_low)/(day_high - stock_price)
   if !amazon_scoring_3_to_2_p.nil? && !amazon_scoring__all_avg.nil? && !amazon_scoring_3_all_p.nil?
     scoring_increase_overall = (amazon_scoring_3_to_2_p-amazon_scoring__all_avg)/amazon_scoring__all_avg
     scoring_increase_than_pre = (amazon_scoring_3_to_2_p-amazon_scoring_3_all_p)/amazon_scoring_3_all_p
   
     # predict_s = %x(python /home/ec2-user/twitt/predict.py -0.66410813 -0.66404772 /home/ec2-user/twitt/model/model.pkl)
-    predict_s = `python /home/ec2-user/twitt/predict.py #{scoring_increase_overall} #{scoring_increase_than_pre} /home/ec2-user/twitt/model/model.pkl`
+    predict_s = `python /home/ec2-user/twitt/predict.py #{scoring_increase_overall} #{scoring_increase_than_pre} #{quote_data_year_percent} #{quote_data_day_percent} /home/ec2-user/twitt/model/decision_tree.pkl`
     score_percent = predict_s.to_f
     predict = 0
     if score_percent > 0.3
@@ -70,7 +78,7 @@ SCHEDULER.every '2s' do
       predict = (score_percent-0.25)/0.1
     end
   else
-    predict_s = `python /home/ec2-user/twitt/predict.py 0 0 /home/ec2-user/twitt/model/model.pkl`
+    predict_s = `python /home/ec2-user/twitt/predict.py 0 0 0 0 /home/ec2-user/twitt/model/decision_tree.pkl`
     predict = predict_s.to_f
   end
 
