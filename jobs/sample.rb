@@ -60,8 +60,8 @@ SCHEDULER.every '2s' do
   day_range = MarketBeat.days_range :AMZN
   day_high = day_range[1]
   day_low = day_range[0]
-  quote_data_year_percent = (stock_price - year_low)/(year_high - stock_price)
-  quote_data_day_percent = (stock_price - day_low)/(day_high - stock_price)
+  quote_data_year_percent = (stock_price.to_f - year_low.to_f)/(year_high.to_f - stock_price.to_f)
+  quote_data_day_percent = (stock_price.to_f - day_low.to_f)/(day_high.to_f - stock_price.to_f)
   if !amazon_scoring_3_to_2_p.nil? && !amazon_scoring__all_avg.nil? && !amazon_scoring_3_all_p.nil?
     scoring_increase_overall = (amazon_scoring_3_to_2_p-amazon_scoring__all_avg)/amazon_scoring__all_avg
     scoring_increase_than_pre = (amazon_scoring_3_to_2_p-amazon_scoring_3_all_p)/amazon_scoring_3_all_p
