@@ -67,7 +67,7 @@ SCHEDULER.every '2s' do
     scoring_increase_than_pre = (amazon_scoring_3_to_2_p-amazon_scoring_3_all_p)/amazon_scoring_3_all_p
   
     # predict_s = %x(python /home/ec2-user/twitt/predict.py -0.66410813 -0.66404772 /home/ec2-user/twitt/model/model.pkl)
-    predict_s = `python /home/ec2-user/twitt/predict.py #{scoring_increase_overall} #{scoring_increase_than_pre} #{quote_data_year_percent} #{quote_data_day_percent} /home/ec2-user/twitt/model/decision_tree.pkl`
+    predict_s = `python /home/ec2-user/twitt/predict_decision_tree.py #{scoring_increase_overall} #{scoring_increase_than_pre} #{quote_data_year_percent} #{quote_data_day_percent} /home/ec2-user/twitt/model/decision_tree.pkl`
     score_percent = predict_s.to_f
     predict = 0
     if score_percent > 0.3
@@ -78,7 +78,7 @@ SCHEDULER.every '2s' do
       predict = (score_percent-0.25)/0.1
     end
   else
-    predict_s = `python /home/ec2-user/twitt/predict.py 0 0 0 0 /home/ec2-user/twitt/model/decision_tree.pkl`
+    predict_s = `python /home/ec2-user/twitt/predict_decision_tree.py 0 0 0 0 /home/ec2-user/twitt/model/decision_tree.pkl`
     predict = predict_s.to_f
   end
 
