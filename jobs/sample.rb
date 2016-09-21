@@ -17,13 +17,13 @@ SCHEDULER.every '2s' do
   # tweets_count = tweets_count_result["aggregations"]["count_by_type"]["buckets"][0]["doc_count"]
 
   # Scoring result for the past
-  amazon_scoring_result_all_avg = client.search index: 'stocks', type: 'Amazon', body: { size: 0,
+  dust_scoring_result_all_avg = client.search index: 'stocks', type: 'DUST', body: { size: 0,
                               aggs: { avg_grade: { avg: { field: 'scoring'}}}}
-  amazon_scoring__all_avg = amazon_scoring_result_all_avg["aggregations"]["avg_grade"]["value"]
+  dust_scoring__all_avg = dust_scoring_result_all_avg["aggregations"]["avg_grade"]["value"]
 
   #Scoring result for the past 3 hours
 
-  amazon_scoring_result_3p = client.search index: 'stocks', type: 'Amazon', body: { size: 0, query: {
+  dust_scoring_result_3p = client.search index: 'stocks', type: 'DUST', body: { size: 0, query: {
                                   range: {
                                     created_at: {
                                       gte: date_three_hour,
@@ -32,9 +32,9 @@ SCHEDULER.every '2s' do
                                   }
                                },
                               aggs: { avg_grade: { avg: { field: 'scoring'}}}}
-  amazon_scoring_3p = amazon_scoring_result_3p["aggregations"]["avg_grade"]["value"]
+  dust_scoring_3p = dust_scoring_result_3p["aggregations"]["avg_grade"]["value"]
 
-  amazon_scoring_result_3_to_2_p = client.search index: 'stocks', type: 'Amazon', body: { size: 0, query: {
+  dust_scoring_result_3_to_2_p = client.search index: 'stocks', type: 'DUST', body: { size: 0, query: {
                                   range: {
                                     created_at: {
                                       gte: time_range_start,
@@ -43,9 +43,9 @@ SCHEDULER.every '2s' do
                                   }
                                },
                               aggs: { avg_grade: { avg: { field: 'scoring'}}}}
-  amazon_scoring_3_to_2_p = amazon_scoring_result_3p["aggregations"]["avg_grade"]["value"]
+  dust_scoring_3_to_2_p = dust_scoring_result_3p["aggregations"]["avg_grade"]["value"]
 
-  amazon_scoring_result_3_all_p = client.search index: 'stocks', type: 'Amazon', body: { size: 0, query: {
+  dust_scoring_result_3_all_p = client.search index: 'stocks', type: 'DUST', body: { size: 0, query: {
                                   range: {
                                     created_at: {
                                       lte: time_range_start
@@ -53,18 +53,18 @@ SCHEDULER.every '2s' do
                                   }
                                },
                               aggs: { avg_grade: { avg: { field: 'scoring'}}}}
-  amazon_scoring_3_all_p = amazon_scoring_result_3_all_p["aggregations"]["avg_grade"]["value"]
-  stock_price = MarketBeat.last_trade_real_time :AMZN
-  year_high = MarketBeat.high_52_week :AMZN
-  year_low = MarketBeat.low_52_week :AMZN
-  day_range = MarketBeat.days_range :AMZN
+  dust_scoring_3_all_p = dust_scoring_result_3_all_p["aggregations"]["avg_grade"]["value"]
+  stock_price = MarketBeat.last_trade_real_time :DUST
+  year_high = MarketBeat.high_52_week :DUST
+  year_low = MarketBeat.low_52_week :DUST
+  day_range = MarketBeat.days_range :DUST
   day_high = day_range[1]
   day_low = day_range[0]
   quote_data_year_percent = (stock_price.to_f - year_low.to_f)/(year_high.to_f - stock_price.to_f)
   quote_data_day_percent = (stock_price.to_f - day_low.to_f)/(day_high.to_f - stock_price.to_f)
-  if !amazon_scoring_3_to_2_p.nil? && !amazon_scoring__all_avg.nil? && !amazon_scoring_3_all_p.nil?
-    scoring_increase_overall = (amazon_scoring_3_to_2_p-amazon_scoring__all_avg)/amazon_scoring__all_avg
-    scoring_increase_than_pre = (amazon_scoring_3_to_2_p-amazon_scoring_3_all_p)/amazon_scoring_3_all_p
+  if !dust_scoring_3_to_2_p.nil? && !dust_scoring__all_avg.nil? && !dust_scoring_3_all_p.nil?
+    scoring_increase_overall = (dust_scoring_3_to_2_p-dust_scoring__all_avg)/dust_scoring__all_avg
+    scoring_increase_than_pre = (dust_scoring_3_to_2_p-dust_scoring_3_all_p)/dust_scoring_3_all_p
   
     # predict_s = %x(python /home/ec2-user/twitt/predict.py -0.66410813 -0.66404772 /home/ec2-user/twitt/model/model.pkl)
     predict_s = `python /home/ec2-user/twitt/predict_decision_tree.py #{scoring_increase_overall} #{scoring_increase_than_pre} #{quote_data_year_percent} #{quote_data_day_percent} /home/ec2-user/twitt/model/decision_tree.pkl`
@@ -82,10 +82,10 @@ SCHEDULER.every '2s' do
     predict = predict_s.to_f
   end
 
-  last_valuation = (amazon_scoring__all_avg*1000).round(2)
-  last_karma     = amazon_scoring__all_avg
-  current_valuation = amazon_scoring_3p.nil? ? 0 : (amazon_scoring_3p*1000).round(2)
-  current_karma     = amazon_scoring__all_avg
+  last_valuation = (dust_scoring__all_avg*1000).round(2)
+  last_karma     = dust_scoring__all_avg
+  current_valuation = dust_scoring_3p.nil? ? 0 : (dust_scoring_3p*1000).round(2)
+  current_karma     = dust_scoring__all_avg
 
   send_event('valuation', { current: current_valuation, last: last_valuation })
   send_event('karma', { current: current_karma, last: last_karma })

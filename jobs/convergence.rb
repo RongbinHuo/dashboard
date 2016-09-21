@@ -9,7 +9,7 @@ end
 last_x = points.last[:x]
 
 SCHEDULER.every '2s' do
-  tweets_count_result = client.search index: 'stocks', type: 'Amazon', body: { size: 0, aggs: { count_by_type: { terms: { field: '_type'}}}}
+  tweets_count_result = client.search index: 'stocks', type: 'DUST', body: { size: 0, aggs: { count_by_type: { terms: { field: '_type'}}}}
   tweets_count = tweets_count_result["aggregations"]["count_by_type"]["buckets"][0]["doc_count"]
   points.shift
   last_x += 1

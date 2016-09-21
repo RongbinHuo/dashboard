@@ -4,14 +4,14 @@ buzzwords = ['RT Pirce', 'Day Range', 'Change Percent', 'One day', '52 Week High
 buzzword_counts = Hash.new({ value: 0 })
 
 SCHEDULER.every '2s' do
-  stock_price = MarketBeat.last_trade_real_time :AMZN
-  stock_day_range = MarketBeat.days_range_real_time :AMZN
-  stock_change_percent = MarketBeat.percent_change_real_time :AMZN
-  stock_one_day_change = MarketBeat.change_and_percent_change :AMZN
-  year_high = MarketBeat.high_52_week :AMZN
-  two_hundrad_days_change = MarketBeat.percent_change_from_200_day_moving_average :AMZN
-  fifty_days_change = MarketBeat.percent_change_from_50_day_moving_average :AMZN
-  percent_from_year_high = MarketBeat.percent_change_from_52_week_high :AMZN
+  stock_price = MarketBeat.last_trade_real_time :DUST
+  stock_day_range = MarketBeat.days_range_real_time :DUST
+  stock_change_percent = MarketBeat.percent_change_real_time :DUST
+  stock_one_day_change = MarketBeat.change_and_percent_change :DUST
+  year_high = MarketBeat.high_52_week :DUST
+  two_hundrad_days_change = MarketBeat.percent_change_from_200_day_moving_average :DUST
+  fifty_days_change = MarketBeat.percent_change_from_50_day_moving_average :DUST
+  percent_from_year_high = MarketBeat.percent_change_from_52_week_high :DUST
   buzzword_counts['Bid Pirce'] = { label: 'Bid Pirce', value: stock_price }
   buzzword_counts['Day Range'] = { label: 'Day Range', value: stock_day_range }
   buzzword_counts['Change Percent'] = { label: 'Change Percent', value: stock_change_percent }
