@@ -12,16 +12,17 @@ end
 
 search_term = URI::encode('$DUST')
 
-SCHEDULER.every '10m', :first_in => 0 do |job|
+SCHEDULER.every '5m', :first_in => 0 do |job|
   begin
     tweets = twitter.search("#{search_term}")
     content_ary = []
     if tweets
-      tweets_ary = twitter.search("#{search_term}").first(5)
-      content = ''
+      tweets_ary = twitter.search("#{search_term}").first(3)
       tweets_ary.each do |t|
+        content = ''
         if t
-          content << t.text+'   '+t.created_at.to_s
+          content_test = t.text.dup 
+          content << content_test.strip+'   '+t.created_at.to_s
           content_ary.push(content)
         end
       end
