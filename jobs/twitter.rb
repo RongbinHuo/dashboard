@@ -29,7 +29,7 @@ SCHEDULER.every '5m', :first_in => 0 do |job|
       # tweets = tweets.map do |tweet|
       #   { name: tweet.user.name, body: tweet.text, avatar: tweet.user.profile_image_url_https,  }
       # end
-      send_event('twitter_mentions', texts: content_ary)
+      send_event('twitter_mentions', items: content_ary)
     end
   rescue Twitter::Error
     puts "\e[33mFor the twitter widget to work, you need to put in your twitter API keys in the jobs/twitter.rb file.\e[0m"
