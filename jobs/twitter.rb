@@ -22,7 +22,7 @@ SCHEDULER.every '5m', :first_in => 0 do |job|
         content = ''
         if t
           content_test = t.text.dup 
-          content << content_test.strip+'   '+t.created_at.to_s
+          content << content_test.strip+' --- '+t.created_at.to_s
           content_ary.push(content)
         end
       end
