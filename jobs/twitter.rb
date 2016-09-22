@@ -10,11 +10,11 @@ twitter = Twitter::REST::Client.new do |config|
   config.access_token_secret = 'ueIysJeHEBQuvHVtZnsYu2WEv9mCDznpSbkPgyUxEsuNm'
 end
 
-search_term = URI::encode('#todayilearned')
+search_term = URI::encode('$DUST')
 
 SCHEDULER.every '10m', :first_in => 0 do |job|
   begin
-    tweets = twitter.search("#{$DUST}")
+    tweets = twitter.search("#{search_term}")
 
     if tweets
       tweets = tweets.map do |tweet|
