@@ -15,19 +15,20 @@ search_term = URI::encode('$DUST')
 SCHEDULER.every '10m', :first_in => 0 do |job|
   begin
     tweets = twitter.search("#{search_term}")
-
+    content_ary = []
     if tweets
       tweets_ary = twitter.search("#{search_term}").first(5)
       content = ''
       tweets_ary.each do |t|
         if t
-          content << t.text+'   '+t.created_at.to_s+"\n"
+          content << t.text+'   '+t.created_at.to_s
+          content_ary.push(content)
         end
       end
       # tweets = tweets.map do |tweet|
       #   { name: tweet.user.name, body: tweet.text, avatar: tweet.user.profile_image_url_https,  }
       # end
-      send_event('twitter_mentions', text: content)
+      send_event('twitter_mentions', texts: content_ary)
     end
   rescue Twitter::Error
     puts "\e[33mFor the twitter widget to work, you need to put in your twitter API keys in the jobs/twitter.rb file.\e[0m"

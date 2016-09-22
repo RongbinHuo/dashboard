@@ -1,6 +1,11 @@
 <h1 class="title" data-bind="title"></h1>
 
-<h3 data-bind="text"></h3>
+<!-- <h5 data-bind="text"></h5> -->
+<ol>
+  <li data-foreach-item="texts">
+    <span class="label" data-bind="text"></span>
+  </li>
+</ol>
 
 <p class="more-info" data-bind="moreinfo"></p>
 
