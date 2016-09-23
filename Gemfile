@@ -15,6 +15,4 @@ gem 'market_beat'
 
 gem 'nokogiri'
 
-gem 'open-uri'
-
 gem 'passenger'
