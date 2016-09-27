@@ -3,6 +3,8 @@ require 'nokogiri'
 
 url = 'https://www.bulliondesk.com/gold-news/'
 
+news = Hash.new({ value: 0 })
+
 SCHEDULER.every '2s' do
   html = open(url)
   doc = Nokogiri::HTML(html)
@@ -23,6 +25,6 @@ SCHEDULER.every '2s' do
   news['latest'] = { content: latest_news_content, time: latest_new_timestamp, url:  latest_news_url}
   news['basic1'] = { content: basic_news1_content, time: basic_news1_timestamp, url:  basic_news1_url}
   news['basic2'] = { content: basic_news2_content, time: basic_news2_timestamp, url:  basic_news2_url}
-  
+
   send_event('gold_news', items: news)
 end
