@@ -28,6 +28,6 @@ SCHEDULER.every '20s' do
   news.push(latest_news_content)
   news.push(basic_news1_content)
   news.push(basic_news2_content)
-  puts "aaaaaaaaa #{news.inspect}"
+
   send_event('gold_news', items: news)
 end

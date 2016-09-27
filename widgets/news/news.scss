@@ -4,7 +4,6 @@
 $background-color:  #eeeeee;
 
 $title-color:       #4b4b4b;
-$value-color:       #fff;
 $moreinfo-color:    #4b4b4b;
 
 // ----------------------------------------------------------------------------
@@ -18,15 +17,8 @@ $moreinfo-color:    #4b4b4b;
     color: $title-color;
   }
 
-  .value{
-    color: $value-color;
-  }
-
-  .label {
-    float: right;
-    margin-left: 12px;
-    font-weight: 600;
-    color: $value-color;
+  .label{
+    color: $title-color;
   }
   
   ol, ul {

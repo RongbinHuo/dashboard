@@ -21,6 +21,5 @@ SCHEDULER.every '2s' do
   buzzword_counts['50 Day Change'] = { label: '50 Day Change', value: fifty_days_change }
   buzzword_counts['Year high change'] = { label: 'Year high change', value: percent_from_year_high }
   
-  puts "bbbbbbbbbb #{buzzword_counts.inspect}"
   send_event('buzzwords', { items: buzzword_counts.values })
 end
