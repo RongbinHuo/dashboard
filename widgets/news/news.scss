@@ -1,0 +1,49 @@
+// ----------------------------------------------------------------------------
+// Sass declarations
+// ----------------------------------------------------------------------------
+$background-color:  #eeeeee;
+
+$title-color:       #4b4b4b;
+$value-color:       #fff;
+$moreinfo-color:    #4b4b4b;
+
+// ----------------------------------------------------------------------------
+// Widget-text styles
+// ----------------------------------------------------------------------------
+.widget-text {
+
+  background-color: $background-color;
+
+  .title {
+    color: $title-color;
+  }
+
+  .value{
+    color: $title-color;
+  }
+
+  .label {
+    float: right;
+    margin-left: 12px;
+    font-weight: 600;
+    color: $value-color;
+  }
+  
+  ol, ul {
+    margin: 0 15px;
+    text-align: left;
+    color: $title-color;
+  }
+  .more-info {
+    color: $moreinfo-color;
+  }
+
+  .updated-at {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+
+  &.large h3 {
+    font-size: 65px;
+  }
+}
