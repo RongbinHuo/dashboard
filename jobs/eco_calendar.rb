@@ -13,7 +13,7 @@ SCHEDULER.every '20s' do
   all_events.each_with_index do |e,i|
     if e["data-importance"] == 'high'
       date_time = e.css('td')[1].children.text
-      topic_raw = a["data-search"]
+      topic_raw = e["data-search"]
       topic = topic_raw.slice(0,1).capitalize + topic_raw.slice(1..-1)
       news.push(date_time + "  :  " + topic)
     end
