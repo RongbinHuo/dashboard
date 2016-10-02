@@ -16,3 +16,5 @@ gem 'market_beat'
 gem 'nokogiri'
 
 gem 'passenger'
+
+gem 'mysql'
