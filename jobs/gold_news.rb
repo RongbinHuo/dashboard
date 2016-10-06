@@ -40,7 +40,10 @@ SCHEDULER.every '300s' do
 	    news_text = n.css('.article-title').text.strip()
 	    news_time_str = n.css('.post-date').text.strip()
 	    news_time = Time.parse(news_time_str)
-	    news_href = 'http://www.kitco.com'+n.css('a')[0]['href'].strip()
+	    raw_href = n.css('a')[0]['href'].strip()
+	    news_href = raw_href
+	    if raw_href.start_with?('/')
+	    	news_href = 'http://www.kitco.com'+raw_href
 	    rs = check_query.execute(news_text).fetch
 	    if rs.nil?
 	    	insert_with_datetime.execute(news_text, news_href, news_time)
