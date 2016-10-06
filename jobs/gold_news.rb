@@ -16,7 +16,7 @@ url_usagold = 'http://www.usagold.com/dailyquotes.html'
 
 url_kitco = 'http://www.kitco.com/market/marketnews.html'
 
-SCHEDULER.every '600s' do
+SCHEDULER.every '300s' do
 	html_usagold = open(url_usagold)
 	doc_usagold = Nokogiri::HTML(html_usagold)
 
@@ -38,7 +38,8 @@ SCHEDULER.every '600s' do
 	news_time_source_kitco = doc_kitco.css('div .gold')
 	news_time_source_kitco.each do |n|
 	    news_text = n.css('.article-title').text.strip()
-	    news_time = n.css('.post-date').text.strip()
+	    news_time_str = n.css('.post-date').text.strip()
+	    news_time = Date.parse news_time_str
 	    news_href = 'http://www.kitco.com'+n.css('a')[0]['href'].strip()
 	    rs = check_query.execute(news_text).fetch
 	    if rs.nil?
