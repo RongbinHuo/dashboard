@@ -44,6 +44,7 @@ SCHEDULER.every '300s' do
 	    news_href = raw_href
 	    if raw_href.start_with?('/')
 	    	news_href = 'http://www.kitco.com'+raw_href
+	    end
 	    rs = check_query.execute(news_text).fetch
 	    if rs.nil?
 	    	insert_with_datetime.execute(news_text, news_href, news_time)
