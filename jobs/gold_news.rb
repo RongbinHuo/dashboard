@@ -7,21 +7,23 @@ db_user  = "root"
 db_pass  = "12345678"
 db_name = "twit"
 
-conn = Mysql.new(db_host, db_user, db_pass, db_name)
-check_query = conn.prepare('SELECT * from gold_news where text = (?)')
-insert = conn.prepare('INSERT INTO gold_news (text, link) VALUES(?, ?)')
-insert_with_datetime = conn.prepare('INSERT INTO gold_news (text, link, news_date) VALUES(?, ?, ?)')
 
 url_usagold = 'http://www.usagold.com/dailyquotes.html'
 
 url_kitco = 'http://www.kitco.com/market/marketnews.html'
 
+url_sharps = 'http://info.sharpspixley.com/news/gold-news/'
+
 SCHEDULER.every '300s' do
+
+	conn = Mysql.new(db_host, db_user, db_pass, db_name)
+	check_query = conn.prepare('SELECT * from gold_news where text = (?)')
+	insert = conn.prepare('INSERT INTO gold_news (text, link) VALUES(?, ?)')
+	insert_with_datetime = conn.prepare('INSERT INTO gold_news (text, link, news_date) VALUES(?, ?, ?)')
+
 	html_usagold = open(url_usagold)
 	doc_usagold = Nokogiri::HTML(html_usagold)
-
 	news_time_source_usagold = doc_usagold.css('span.txtarial11 table tr td[valign="TOP"]')
-
 	news_time_source_usagold.each do |n|
 		if n["align"].nil?
 		    news_text = n.text.strip()
@@ -50,5 +52,24 @@ SCHEDULER.every '300s' do
 	    	insert_with_datetime.execute(news_text, news_href, news_time)
 	    end
 	end
+
+	html_sharps = open(url_sharps)
+	doc_sharps = Nokogiri::HTML(html_sharps)
+	news_time_source_shaprs = doc_sharps.css('div.newsTable li')
+	news_time_source_shaprs.each do |n|
+		news_text = n.text.strip()
+		news_time = Time.parse(n.css('.Date').text.strip())
+		news_href =  n.css('a')[0]['href'].strip()
+		rs = check_query.execute(news_text).fetch
+		if rs.nil?
+			insert_with_datetime.execute(news_text, news_href, news_time)
+		end
+	end
+
+	conn.close
 end
+
+
+
+
 
