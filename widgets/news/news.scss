@@ -21,17 +21,26 @@ $moreinfo-color:    #4b4b4b;
     color: $title-color;
   }
   
-  ol, ul {
+  ul {
     margin: 0 15px;
     text-align: left;
     color: $title-color;
+    list-style-type: square;
   }
+
+  ul li {
+    padding: 10px;
+    margin-left: 15px;
+  }
+
   .more-info {
     color: $moreinfo-color;
   }
 
   .updated-at {
     color: rgba(255, 255, 255, 0.7);
+    position: relative;
+    padding: 10px;
   }
 
 
