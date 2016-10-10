@@ -1,0 +1,49 @@
+// ----------------------------------------------------------------------------
+// Sass declarations
+// ----------------------------------------------------------------------------
+$background-color:  #eeeeee;
+
+$title-color:       #4b4b4b;
+$moreinfo-color:    #4b4b4b;
+
+// ----------------------------------------------------------------------------
+// Widget-calendar styles
+// ----------------------------------------------------------------------------
+.widget-calendar {
+
+  background-color: $background-color;
+
+  .title {
+    color: $title-color;
+  }
+
+  .label{
+    color: $title-color;
+  }
+  
+  ul {
+    margin: 0 15px;
+    text-align: left;
+    color: $title-color;
+    list-style-type: square;
+  }
+
+  ul li {
+    padding: 10px;
+    margin-left: 15px;
+  }
+  .more-info {
+    color: $moreinfo-color;
+  }
+
+  .updated-at {
+    color: rgba(235, 156, 60, 1);
+    position: relative;
+    padding: 10px;
+  }
+
+
+  &.large h3 {
+    font-size: 65px;
+  }
+}
