@@ -1,1 +1,1 @@
-class Dashing.News extends Dashing.Widget
+class Dashing.Calendar extends Dashing.Widget
