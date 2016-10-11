@@ -18,3 +18,7 @@ gem 'nokogiri'
 gem 'passenger'
 
 gem 'mysql'
+
+gem 'pony'
+
+gem 'sanitize'
