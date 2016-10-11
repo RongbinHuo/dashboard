@@ -1,4 +1,4 @@
-require 'active_support/core_ext/hash' # for symbolize_keys
+require 'active_support/all' # for symbolize_keys
 
 module Conf
   
