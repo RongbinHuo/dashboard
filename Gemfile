@@ -22,3 +22,6 @@ gem 'mysql'
 gem 'pony'
 
 gem 'sanitize'
+
+gem 'activerecord', '~> 4.1.0'  # there's an issue with upgrading to 4.2 with delayed_job
+gem 'sinatra-activerecord'
