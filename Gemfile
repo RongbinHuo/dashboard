@@ -22,5 +22,3 @@ gem 'mysql'
 gem 'pony'
 
 gem 'sanitize'
-
-gem 'active_support'
