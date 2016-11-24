@@ -1,4 +1,6 @@
 require 'twitter'
+require 'time'
+require 'active_support/time'
 
 
 #### Get your twitter keys & secrets:
@@ -12,7 +14,7 @@ end
 
 search_term = URI::encode('$DUST')
 
-SCHEDULER.every '5m', :first_in => 0 do |job|
+SCHEDULER.every '3m', :first_in => 0 do |job|
   begin
     tweets = twitter.search("#{search_term}")
     content_ary = []
@@ -21,8 +23,10 @@ SCHEDULER.every '5m', :first_in => 0 do |job|
       tweets_ary.each do |t|
         content = ''
         if t
-          content_test = t.text.dup 
-          content << content_test.strip+' --- '+t.created_at.to_s
+          content_test = t.text.dup
+          time_utc =  Time.parse(t.created_at.to_s)
+          time_ect = time_utc.in_time_zone("Eastern Time (US & Canada)")
+          content << content_test.strip+' --- '+time_ect.to_s
           content_ary.push(content)
         end
       end
