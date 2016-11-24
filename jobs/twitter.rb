@@ -14,7 +14,7 @@ end
 
 search_term = URI::encode('$DUST')
 important_words = ['gold','dollar','fed','rate','debt','bond','economy','equity','interest','data','inflation','risk']
-SCHEDULER.every '3m', :first_in => 0 do |job|
+SCHEDULER.every '1m', :first_in => 0 do |job|
   begin
     tweets = twitter.search("#{search_term}")
     content_ary = []
