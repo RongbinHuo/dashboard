@@ -20,7 +20,7 @@ SCHEDULER.every '3m', :first_in => 0 do |job|
     content_ary = []
     count_tweets = 0
     if tweets
-      tweets_ary = twitter.search("#{search_term}").first(20)
+      tweets_ary = twitter.search("#{search_term}").first(100)
       tweets_ary.each do |t|
         content = ''
         if t
