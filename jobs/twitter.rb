@@ -28,7 +28,7 @@ SCHEDULER.every '1m', :first_in => 0 do |job|
           if important_words.any?{|w| content_test.include?(w)}
             time_utc =  Time.parse(t.created_at.to_s)
             time_ect = time_utc.in_time_zone("Eastern Time (US & Canada)")
-            content << content_test.strip+' --- '+time_ect.to_s
+            content << content_test.gsub!(/(?:f|ht)tps?:\/[^\s]+/, '').strip+' --- '+time_ect.to_s
             content_ary.push(content)
             count_tweets = count_tweets + 1
           end
