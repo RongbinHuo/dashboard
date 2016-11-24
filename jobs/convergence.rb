@@ -21,7 +21,7 @@ SCHEDULER.every '2s' do
   tweets_count = rs.fetch_row[0].to_i
 
   points.shift
-  last_x += 1
+  last_x = rand(10)
   points << { x: last_x, y: tweets_count }
 
   send_event('convergence', points: points)
