@@ -13,26 +13,30 @@ twitter = Twitter::REST::Client.new do |config|
 end
 
 search_term = URI::encode('$DUST')
-
+important_words = ['gold','dollar','fed','rate','debt','bond','economy','equity','interest','data','inflation','risk']
 SCHEDULER.every '3m', :first_in => 0 do |job|
   begin
     tweets = twitter.search("#{search_term}")
     content_ary = []
+    count_tweets = 0
     if tweets
-      tweets_ary = twitter.search("#{search_term}").first(3)
+      tweets_ary = twitter.search("#{search_term}").first(20)
       tweets_ary.each do |t|
         content = ''
         if t
           content_test = t.text.dup
-          time_utc =  Time.parse(t.created_at.to_s)
-          time_ect = time_utc.in_time_zone("Eastern Time (US & Canada)")
-          content << content_test.strip+' --- '+time_ect.to_s
-          content_ary.push(content)
+          if important_words.any?{|w| content_test.include?(w)}
+            time_utc =  Time.parse(t.created_at.to_s)
+            time_ect = time_utc.in_time_zone("Eastern Time (US & Canada)")
+            content << content_test.strip+' --- '+time_ect.to_s
+            content_ary.push(content)
+            count_tweets = count_tweets + 1
+          end
+        end
+        if count_tweets > 3
+          break
         end
       end
-      # tweets = tweets.map do |tweet|
-      #   { name: tweet.user.name, body: tweet.text, avatar: tweet.user.profile_image_url_https,  }
-      # end
       send_event('twitter_mentions', items: content_ary)
     end
   rescue Twitter::Error
