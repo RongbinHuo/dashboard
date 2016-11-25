@@ -13,7 +13,7 @@ SCHEDULER.every '2s' do
   fifty_days_change = MarketBeat.percent_change_from_50_day_moving_average :DUST
   percent_from_year_high = MarketBeat.percent_change_from_52_week_high :DUST
   buzzword_counts['Bid Pirce'] = { label: 'Bid Pirce', value: stock_price }
-  buzzword_counts['Day Range'] = { label: 'Day Range', value: stock_day_range }
+  # buzzword_counts['Day Range'] = { label: 'Day Range', value: stock_day_range }
   buzzword_counts['Change Percent'] = { label: 'Change Percent', value: stock_change_percent }
   buzzword_counts['One day'] = { label: 'One day', value: stock_one_day_change[1] }
   buzzword_counts['52 Week High'] = { label: '52 Week High', value: year_high }
