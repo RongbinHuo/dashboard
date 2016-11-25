@@ -34,7 +34,7 @@ SCHEDULER.every '1m', :first_in => 0 do |job|
             count_tweets = count_tweets + 1
           end
         end
-        if count_tweets > 3
+        if count_tweets > 2
           break
         end
       end
