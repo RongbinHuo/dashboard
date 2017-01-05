@@ -17,7 +17,7 @@ url_sharps = 'http://info.sharpspixley.com/news/gold-news/'
 SCHEDULER.every '300s' do
 
 	conn = Mysql.new(db_host, db_user, db_pass, db_name)
-	check_query = conn.prepare('SELECT * from gold_news where text = (?)')
+	check_query = conn.prepare('SELECT * from gold_news where link = (?)')
 	insert = conn.prepare('INSERT INTO gold_news (text, link) VALUES(?, ?)')
 	insert_with_datetime = conn.prepare('INSERT INTO gold_news (text, link, news_date) VALUES(?, ?, ?)')
 
@@ -28,7 +28,7 @@ SCHEDULER.every '300s' do
 		if n["align"].nil?
 		    news_text = n.text.strip()
 			href = n.css('font a')[0]['href'].strip()
-			rs = check_query.execute(news_text).fetch
+			rs = check_query.execute(href).fetch
 			if rs.nil?
 			    insert.execute(news_text, href)
 			end
@@ -47,7 +47,7 @@ SCHEDULER.every '300s' do
 	    if raw_href.start_with?('/')
 	    	news_href = 'http://www.kitco.com'+raw_href
 	    end
-	    rs = check_query.execute(news_text).fetch
+	    rs = check_query.execute(news_href).fetch
 	    if rs.nil?
 	    	insert_with_datetime.execute(news_text, news_href, news_time)
 	    end
@@ -60,7 +60,7 @@ SCHEDULER.every '300s' do
 		news_text = n.text.strip()
 		news_time = Time.parse(n.css('.Date').text.strip())
 		news_href =  n.css('a')[0]['href'].strip()
-		rs = check_query.execute(news_text).fetch
+		rs = check_query.execute(news_href).fetch
 		if rs.nil?
 			insert_with_datetime.execute(news_text, news_href, news_time)
 		end
