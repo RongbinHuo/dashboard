@@ -2,7 +2,7 @@ require 'elasticsearch'
 require 'market_beat'
 
 client = Elasticsearch::Client.new log: false
-last_value = 0
+last_value = 1
 
 SCHEDULER.every '600s' do
   # if !dust_scoring_3_to_2_p.nil? && !dust_scoring__all_avg.nil? && !dust_scoring_3_all_p.nil?
@@ -30,12 +30,16 @@ SCHEDULER.every '600s' do
 
   # last_valuation = (dust_scoring__all_avg*1000).round(2)
   # last_karma     = dust_scoring__all_avg
-  current_valuation = predict * 100
+  current_valuation = (predict*100).round(2)
   # current_karma     = dust_scoring__all_avg
+  change_percentage = 0
+  if last_value != 0
+    change_percentage = (current_valuation-last_value)/last_value
+  end
 
-  send_event('valuation', { current: current_valuation, last: last_value })
+  send_event('valuation', { current: change_percentage, last: current_valuation })
   # send_event('karma', { current: current_karma, last: last_karma })
-  send_event('synergy',   { value: (predict*100).round(2) })
+  send_event('synergy',   { value: current_valuation })
   last_value = current_valuation
 end
 
