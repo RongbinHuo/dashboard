@@ -37,8 +37,8 @@ SCHEDULER.every '600s' do
   # last_valuation = (dust_scoring__all_avg*1000).round(2)
   # last_karma     = dust_scoring__all_avg
   current_valuation = (predict*100).round(2)
-  prediction_history.append(current_valuation)
-  avg_price  = reduce(lambda x, y: x + y, prediction_history) / len(prediction_history)
+  prediction_history.push(current_valuation)
+  avg_price  = prediction_history.reduce(:+) / prediction_history.size.to_f
   # current_karma     = dust_scoring__all_avg
 
   send_event('valuation', { current: current_valuation, last: last_value })
