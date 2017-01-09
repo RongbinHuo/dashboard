@@ -4,7 +4,7 @@ require 'market_beat'
 client = Elasticsearch::Client.new log: false
 last_value = 0
 
-SCHEDULER.every '2s' do
+SCHEDULER.every '1200s' do
   # if !dust_scoring_3_to_2_p.nil? && !dust_scoring__all_avg.nil? && !dust_scoring_3_all_p.nil?
   #   scoring_increase_overall = (dust_scoring_3_to_2_p-dust_scoring__all_avg)/dust_scoring__all_avg
   #   scoring_increase_than_pre = (dust_scoring_3_to_2_p-dust_scoring_3_all_p)/dust_scoring_3_all_p
@@ -28,9 +28,9 @@ SCHEDULER.every '2s' do
   predict_s = `python /home/ec2-user/twitt/predict_nn.py`
   predict = predict_s.to_f
 
-  last_valuation = (dust_scoring__all_avg*1000).round(2)
-  last_karma     = dust_scoring__all_avg
-  current_valuation = predict * 100
+  # last_valuation = (dust_scoring__all_avg*1000).round(2)
+  # last_karma     = dust_scoring__all_avg
+  # current_valuation = predict * 100
   # current_karma     = dust_scoring__all_avg
 
   send_event('valuation', { current: current_valuation, last: last_value })
