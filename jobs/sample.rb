@@ -3,8 +3,14 @@ require 'market_beat'
 
 client = Elasticsearch::Client.new log: false
 last_value = 1
-
+prediction_history = [0]
+count = 0
 SCHEDULER.every '600s' do
+  count = count +1
+  if count > 144
+    count = 0
+    prediction_history = [0]
+  end
   # if !dust_scoring_3_to_2_p.nil? && !dust_scoring__all_avg.nil? && !dust_scoring_3_all_p.nil?
   #   scoring_increase_overall = (dust_scoring_3_to_2_p-dust_scoring__all_avg)/dust_scoring__all_avg
   #   scoring_increase_than_pre = (dust_scoring_3_to_2_p-dust_scoring_3_all_p)/dust_scoring_3_all_p
@@ -31,11 +37,13 @@ SCHEDULER.every '600s' do
   # last_valuation = (dust_scoring__all_avg*1000).round(2)
   # last_karma     = dust_scoring__all_avg
   current_valuation = (predict*100).round(2)
+  prediction_history.append(current_valuation)
+  avg_price  = reduce(lambda x, y: x + y, prediction_history) / len(prediction_history)
   # current_karma     = dust_scoring__all_avg
 
   send_event('valuation', { current: current_valuation, last: last_value })
   # send_event('karma', { current: current_karma, last: last_karma })
-  send_event('synergy',   { value: current_valuation })
+  send_event('synergy',   { value: avg_price })
   last_value = current_valuation
 end
 
