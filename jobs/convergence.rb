@@ -16,8 +16,8 @@ last_x = points.last[:x]
 
 SCHEDULER.every '2s' do
   conn = Mysql.new(db_host, db_user, db_pass, db_name)
-  ts = (Time.now - (24*60*60)).strftime('%Y-%m-%d %H:%M:%S')
-  rs = conn.query("SELECT COUNT(*) from gold_news where create_at > '#{ts}' ")
+  ts = Time.now.to_date.strftime('%Y-%m-%d')
+  rs = conn.query("SELECT COUNT(*) from gold_news where create_at >= '#{ts}' ")
   tweets_count = rs.fetch_row[0].to_i
 
   points.shift
