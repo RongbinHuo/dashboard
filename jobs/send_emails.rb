@@ -38,11 +38,16 @@ def build_message row
 end
 
 SCHEDULER.cron '0 12 * * *' do
+	predict_s = `python /home/ec2-user/twitt/predict_yesterday.py`
+  	predict = predict_s.to_f
+
+  	yesterday_valuation = (predict*100).round(2)
+
 	conn = Mysql.new(db_host, db_user, db_pass, db_name)
 	ts = (Time.now - (12*60*60)).strftime('%Y-%m-%d %H:%M:%S')
 	rs = conn.query("SELECT text, link, news_date from gold_news where create_at > '#{ts}' ORDER BY create_at DESC")
 	message = '<h2>Todays Gold News</h2>'
-	subject = 'Todays Gold News'
+	subject = "Todays Gold News #{yesterday_valuation}"
 	rs.each do |row|
 		message << build_message(row)
 	end
