@@ -46,7 +46,7 @@ SCHEDULER.every '1m', :first_in => 0 do |job|
             content << content_test.strip+' --- '+time_ect.to_s
             search_terms = Mysql.escape_string(content_test.strip)
             check_query = conn.prepare("SELECT * from twitter where text like '#{search_terms}'")
-            rs = check_query.execute(search_terms).fetch
+            rs = check_query.execute().fetch
             if rs.nil?
               insert.execute(search_terms)
             end
