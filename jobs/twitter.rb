@@ -26,7 +26,7 @@ important_words = ['gold','dollar','fed','rate','debt','bond','economy','equity'
 SCHEDULER.every '1m', :first_in => 0 do |job|
   begin
     conn = Mysql.new(db_host, db_user, db_pass, db_name)
-    check_query = conn.prepare("SELECT * from twitter where text like '?'")
+    # check_query = conn.prepare('SELECT * from twitter where text like ?')
     insert = conn.prepare('INSERT INTO twitter (text) VALUES(?)')
     insert_with_datetime = conn.prepare('INSERT INTO twitter (text, datetime) VALUES(?, ?)')
 
@@ -44,9 +44,11 @@ SCHEDULER.every '1m', :first_in => 0 do |job|
             time_ect = time_utc.in_time_zone("Eastern Time (US & Canada)")
             content_test.gsub!(/(?:f|ht)tps?:\/[^\s]+/, '')
             content << content_test.strip+' --- '+time_ect.to_s
-            rs = check_query.execute(content_test.strip).fetch
+            search_terms = Mysql.escape_string(content_test.strip)
+            check_query = conn.prepare("SELECT * from twitter where text like '#{search_terms}'")
+            rs = check_query.execute(search_terms).fetch
             if rs.nil?
-              insert.execute(content_test.strip)
+              insert.execute(search_terms)
             end
             content_ary.push(content)
             count_tweets = count_tweets + 1
