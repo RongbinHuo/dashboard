@@ -5,6 +5,7 @@ require 'active_support/time'
 require 'mysql'
 require 'open-uri'
 require 'nokogiri'
+require 'set'
 
 db_host  = "rongbin.cdpxz2jepyxw.us-east-1.rds.amazonaws.com"
 db_user  = "root"
@@ -23,6 +24,7 @@ end
 
 search_term = URI::encode('$DUST')
 important_words = ['gold','dollar','fed','rate','debt','bond','economy','equity','interest','data','inflation','risk','trump','yallen']
+twitter_to_insert = Set.new()
 SCHEDULER.every '1m', :first_in => 0 do |job|
   begin
     conn = Mysql.new(db_host, db_user, db_pass, db_name)
@@ -45,9 +47,10 @@ SCHEDULER.every '1m', :first_in => 0 do |job|
             content_test.gsub!(/(?:f|ht)tps?:\/[^\s]+/, '')
             content << content_test.strip+' --- '+time_ect.to_s
             search_terms = Mysql.escape_string(content_test.strip)
-            check_query = conn.prepare("SELECT * from twitter where text like '#{search_terms}'")
-            rs = check_query.execute().fetch
-            if rs.nil?
+            # check_query = conn.prepare("SELECT * from twitter where text like '#{search_terms}'")
+            # rs = check_query.execute().fetch
+            unless twitter_to_insert.include?(search_terms)
+              twitter_to_insert.add(search_terms)
               insert.execute(search_terms)
             end
             if count_tweets <= 2
@@ -56,6 +59,9 @@ SCHEDULER.every '1m', :first_in => 0 do |job|
             count_tweets = count_tweets + 1
           end
         end
+      end
+      if twitter_to_insert.size > 1000
+        twitter_to_insert = Set.new()
       end
       send_event('twitter_mentions', items: content_ary)
     end
