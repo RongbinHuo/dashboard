@@ -2,6 +2,15 @@ require 'twitter'
 require 'time'
 require 'active_support/time'
 
+require 'mysql'
+require 'open-uri'
+require 'nokogiri'
+
+db_host  = "rongbin.cdpxz2jepyxw.us-east-1.rds.amazonaws.com"
+db_user  = "root"
+db_pass  = "12345678"
+db_name = "twit"
+
 
 #### Get your twitter keys & secrets:
 #### https://dev.twitter.com/docs/auth/tokens-devtwittercom
@@ -13,9 +22,14 @@ twitter = Twitter::REST::Client.new do |config|
 end
 
 search_term = URI::encode('$DUST')
-important_words = ['gold','dollar','fed','rate','debt','bond','economy','equity','interest','data','inflation','risk']
+important_words = ['gold','dollar','fed','rate','debt','bond','economy','equity','interest','data','inflation','risk','trump','yallen']
 SCHEDULER.every '1m', :first_in => 0 do |job|
   begin
+    conn = Mysql.new(db_host, db_user, db_pass, db_name)
+    check_query = conn.prepare('SELECT * from twitter where text = (?)')
+    insert = conn.prepare('INSERT INTO twitter (text) VALUES(?)')
+    insert_with_datetime = conn.prepare('INSERT INTO twitter (text, datetime) VALUES(?, ?)')
+
     tweets = twitter.search("#{search_term}")
     content_ary = []
     count_tweets = 0
@@ -30,6 +44,10 @@ SCHEDULER.every '1m', :first_in => 0 do |job|
             time_ect = time_utc.in_time_zone("Eastern Time (US & Canada)")
             content_test.gsub!(/(?:f|ht)tps?:\/[^\s]+/, '')
             content << content_test.strip+' --- '+time_ect.to_s
+            rs = check_query.execute(content_test.strip).fetch
+            if rs.nil?
+              insert.execute(content_test.strip)
+            end
             content_ary.push(content)
             count_tweets = count_tweets + 1
           end
