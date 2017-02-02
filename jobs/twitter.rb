@@ -26,7 +26,7 @@ important_words = ['gold','dollar','fed','rate','debt','bond','economy','equity'
 SCHEDULER.every '1m', :first_in => 0 do |job|
   begin
     conn = Mysql.new(db_host, db_user, db_pass, db_name)
-    check_query = conn.prepare('SELECT * from twitter where text = (?)')
+    check_query = conn.prepare('SELECT * from twitter where text like ?')
     insert = conn.prepare('INSERT INTO twitter (text) VALUES(?)')
     insert_with_datetime = conn.prepare('INSERT INTO twitter (text, datetime) VALUES(?, ?)')
 
