@@ -14,6 +14,9 @@ url_kitco = 'http://www.kitco.com/market/marketnews.html'
 
 url_sharps = 'http://info.sharpspixley.com/news/gold-news/'
 
+url_investing = 'https://www.investing.com/commodities/gold-news'
+
+
 SCHEDULER.every '300s' do
 
 	conn = Mysql.new(db_host, db_user, db_pass, db_name)
@@ -64,6 +67,23 @@ SCHEDULER.every '300s' do
 		if rs.nil?
 			insert_with_datetime.execute(news_text, news_href, news_time)
 		end
+	end
+
+	html_investing = open(url_investing)
+	doc_investing = Nokogiri::HTML(html_investing)
+	news_time_source_investing = doc_investing.css('div .mediumTitle1 .articleItem')
+	news_time_source_investing.each do |n|
+		news_entry = n.css('div')[0].css('a')
+		news_text = news_entry.text.strip()
+		raw_href = news_entry[0]['href'].strip()
+		news_href = raw_href
+		if raw_href.start_with?('/')
+			news_href = 'https://www.investing.com/commodities/gold-news'+raw_href
+		end
+		rs = check_query.execute(news_href).fetch
+		if rs.nil?
+	    	insert.execute(news_text, news_href)
+	    end
 	end
 
 	conn.close
