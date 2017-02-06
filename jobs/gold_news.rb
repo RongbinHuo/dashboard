@@ -78,7 +78,7 @@ SCHEDULER.every '300s' do
 		raw_href = news_entry[0]['href'].strip()
 		news_href = raw_href
 		if raw_href.start_with?('/')
-			news_href = 'https://www.investing.com/'+raw_href
+			news_href = 'https://www.investing.com'+raw_href
 		end
 		rs = check_query.execute(news_href).fetch
 		if rs.nil?
