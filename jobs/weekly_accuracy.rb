@@ -13,7 +13,7 @@ SCHEDULER.every '3600s' do
   current_acuracy = (acuracy*100).round(2)
   acuracy_history.push(current_acuracy)
 
-  send_event('weekly_acuracy', { current: current_valuation, last: last_acuracy })
+  send_event('weekly_acuracy', { current: current_acuracy, last: last_acuracy })
   last_acuracy= current_acuracy
 end
 
