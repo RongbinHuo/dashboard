@@ -1,7 +1,7 @@
 last_acuracy = 1
 acuracy_history = [0]
 count = 0
-SCHEDULER.every '1200s' do
+SCHEDULER.every '3600s' do
   count = count +1
   if count > 144
     count = 0
