@@ -17,6 +17,8 @@ gem 'nokogiri'
 
 gem 'passenger'
 
+gem 'mechanize'
+
 gem 'mysql'
 
 gem 'pony'
