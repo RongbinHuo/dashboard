@@ -1,6 +1,7 @@
 require 'mysql'
 require 'open-uri'
 require 'nokogiri'
+require 'mechanize'
 
 db_host  = "rongbin.cdpxz2jepyxw.us-east-1.rds.amazonaws.com"
 db_user  = "root"
@@ -40,8 +41,10 @@ SCHEDULER.every '300s' do
 		end
 	end
 
-	html_kitco = open(url_kitco)
-	doc_kitco = Nokogiri::HTML(html_kitco)
+	agent = Mechanize.new
+	page = agent.get url_kitco
+	# html_kitco = open(url_kitco)
+	doc_kitco = Nokogiri::HTML(page.content)
 	news_time_source_kitco = doc_kitco.css('div .gold')
 	news_time_source_kitco.each do |n|
 	    news_text = n.css('.article-title').text.strip()
