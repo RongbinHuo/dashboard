@@ -19,6 +19,7 @@ url_investing = 'https://www.investing.com/commodities/gold-news'
 
 url_bulliondesk = 'https://www.bulliondesk.com/gold-news'
 
+url_bullionvault = 'https://www.bullionvault.com/gold-news'
 
 SCHEDULER.every '300s' do
 
@@ -100,6 +101,22 @@ SCHEDULER.every '300s' do
 		news_href = raw_href
 		if raw_href.start_with?('/')
 			news_href = 'https://www.bulliondesk.com'+raw_href
+		end
+		rs = check_query.execute(news_href).fetch
+		if rs.nil?
+	    	insert.execute(news_text, news_href)
+	    end
+	end
+
+	html_bullionvault = open(url_bullionvault)
+	doc_bullionvault = Nokogiri::HTML(html_bullionvault)
+	news_bullionvault = doc_bullionvault.css('.view-content table tbody tr')
+	news_bullionvault.each do |n|
+		news_text = n.css('td a').text.strip
+		raw_href = n.css('td a')[0]['href'].strip()
+		news_href = raw_href
+		if raw_href.start_with?('/')
+			news_href = 'https://www.bullionvault.com'+raw_href
 		end
 		rs = check_query.execute(news_href).fetch
 		if rs.nil?
