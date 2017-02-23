@@ -19,6 +19,8 @@ url_investing = 'https://www.investing.com/commodities/gold-news'
 
 url_bullionvault = 'https://www.bullionvault.com/gold-news'
 
+url_silverdoctors = 'http://www.silverdoctors.com/gold/gold-news/'
+
 SCHEDULER.every '300s' do
 
 	conn = Mysql.new(db_host, db_user, db_pass, db_name)
@@ -105,6 +107,23 @@ SCHEDULER.every '300s' do
 	    	insert.execute(news_text, news_href)
 	    end
 	end
+
+	html_silverdoctors = open(url_silverdoctors)
+	doc_silverdoctors = Nokogiri::HTML(html_silverdoctors)
+	news_silverdoctors = doc_silverdoctors.css('div#archive-content-column div.index-article')
+	news_silverdoctors.each do |n|
+		news_text = n.css('.page-title a').text.strip
+		raw_href = n.css('.page-title a')[0]['href'].strip()
+		news_href = raw_href
+		if raw_href.start_with?('/')
+			news_href = 'http://www.silverdoctors.com/gold/gold-news/'+raw_href
+		end
+		rs = check_query.execute(news_href).fetch
+		if rs.nil?
+	    	insert.execute(news_text, news_href)
+	    end
+	end
+
 
 	conn.close
 end
