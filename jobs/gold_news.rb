@@ -13,8 +13,6 @@ url_usagold = 'http://www.usagold.com/dailyquotes.html'
 
 url_kitco = 'http://www.kitco.com/market/marketnews.html'
 
-url_sharps = 'http://info.sharpspixley.com/news/gold-news/'
-
 url_investing = 'https://www.investing.com/commodities/gold-news'
 
 url_bullionvault = 'https://www.bullionvault.com/gold-news'
@@ -60,19 +58,6 @@ SCHEDULER.every '300s' do
 	    if rs.nil?
 	    	insert_with_datetime.execute(news_text, news_href, news_time)
 	    end
-	end
-
-	html_sharps = open(url_sharps)
-	doc_sharps = Nokogiri::HTML(html_sharps)
-	news_time_source_shaprs = doc_sharps.css('div.newsTable li')
-	news_time_source_shaprs.each do |n|
-		news_text = n.text.strip()
-		news_time = Time.parse(n.css('.Date').text.strip())
-		news_href =  n.css('a')[0]['href'].strip()
-		rs = check_query.execute(news_href).fetch
-		if rs.nil?
-			insert_with_datetime.execute(news_text, news_href, news_time)
-		end
 	end
 
 	html_investing = open(url_investing)
