@@ -19,6 +19,8 @@ url_bullionvault = 'https://www.bullionvault.com/gold-news'
 
 url_silverdoctors = 'http://www.silverdoctors.com/gold/gold-news/'
 
+url_cnbc = 'http://www.cnbc.com/gold/'
+
 SCHEDULER.every '300s' do
 
 	conn = Mysql.new(db_host, db_user, db_pass, db_name)
@@ -101,7 +103,7 @@ SCHEDULER.every '300s' do
 		raw_href = n.css('.page-title a')[0]['href'].strip()
 		news_href = raw_href
 		if raw_href.start_with?('/')
-			news_href = 'http://www.silverdoctors.com/gold/gold-news/'+raw_href
+			news_href = 'http://www.silverdoctors.com/gold/gold-news'+raw_href
 		end
 		rs = check_query.execute(news_href).fetch
 		if rs.nil?
@@ -109,7 +111,21 @@ SCHEDULER.every '300s' do
 	    end
 	end
 
-
+	html_cnbc = open(url_cnbc)
+	doc_cnbc = Nokogiri::HTML(html_cnbc)
+	news_cnbc = doc_cnbc.css('div.stories-lineup li')
+	news_cnbc.each do |n|
+		news_text = n.css('.headline').text.strip
+		raw_href = n.css('.headline a')[0]['href'].strip()
+		news_href = raw_href
+		if raw_href.start_with?('/')
+			news_href = 'http://www.cnbc.com'+raw_href
+		end
+		rs = check_query.execute(news_href).fetch
+		if rs.nil?
+	    	insert.execute(news_text, news_href)
+	    end
+	end
 	conn.close
 end
 
