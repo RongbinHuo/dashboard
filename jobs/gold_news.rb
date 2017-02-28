@@ -21,6 +21,8 @@ url_silverdoctors = 'http://www.silverdoctors.com/gold/gold-news/'
 
 url_cnbc = 'http://www.cnbc.com/gold/'
 
+url_economictimes = 'http://economictimes.indiatimes.com/topic/Gold'
+
 SCHEDULER.every '300s' do
 
 	conn = Mysql.new(db_host, db_user, db_pass, db_name)
@@ -126,6 +128,23 @@ SCHEDULER.every '300s' do
 	    	insert.execute(news_text, news_href)
 	    end
 	end
+
+	html_economictimes = open(url_economictimes)
+	doc_economictimes = Nokogiri::HTML(html_economictimes)
+	news_economictimes = doc_economictimes.css('li#all div')
+	news_economictimes.each do |n|
+		news_text = n.css('a h3').text.strip
+		raw_href = n.css('a')[0]['href'].strip()
+		news_href = raw_href
+		if raw_href.start_with?('/')
+			news_href = 'http://economictimes.indiatimes.com'+raw_href
+		end
+		rs = check_query.execute(news_href).fetch
+		if rs.nil?
+	    	insert.execute(news_text, news_href)
+	    end
+	end
+
 	conn.close
 end
 
