@@ -12,7 +12,7 @@ SCHEDULER.every '600s' do
     prediction_history = [0]
   end
 
-  predict_s = `python /home/ec2-user/twitt/predict_nn.py`
+  predict_s = `python /home/ec2-user/twitt/predict_gbm.py`
   predict = predict_s.to_f
   current_valuation = (predict*100).round(2)
   prediction_history.push(current_valuation)
